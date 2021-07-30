@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from "@angular/fire";
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { environment } from "../environments/environment";
@@ -27,6 +28,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     MaterialModule,
+    FlexLayoutModule,
     AuthModule,
     TrainingModule
   ],
