@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from "../auth.service";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { UIService } from "../../shared/ui.service";
 import { Subscription } from "rxjs";
+import { UIService } from "../../shared/ui.service";
+import { AuthService } from "../auth.service";
 
 @Component({
   selector: 'app-login',
@@ -39,6 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.loadingSubs.unsubscribe();
+    if (this.loadingSubs) {
+      this.loadingSubs.unsubscribe();
+    }
   }
 }

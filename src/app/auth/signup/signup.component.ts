@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
 import { UIService } from "../../shared/ui.service";
+import { AuthService } from "../auth.service";
 
 @Component({
   selector: 'app-signup',
@@ -33,6 +33,8 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.loadingSubs.unsubscribe();
+    if (this.loadingSubs) {
+      this.loadingSubs.unsubscribe();
+    }
   }
 }
