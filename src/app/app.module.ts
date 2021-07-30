@@ -11,7 +11,6 @@ import { AuthModule } from "./auth/auth.module";
 import { MaterialModule } from "./material.module";
 import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
-import { TrainingModule } from "./training/training.module";
 import { TrainingService } from "./training/training.service";
 import { WelcomeComponent } from './welcome/welcome.component';
 
@@ -29,8 +28,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     AngularFireModule.initializeApp(environment.firebase),
     MaterialModule,
     FlexLayoutModule,
-    AuthModule,
-    TrainingModule
+    AuthModule
   ],
   providers: [TrainingService],
   bootstrap: [AppComponent]
