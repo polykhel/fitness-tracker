@@ -5,8 +5,11 @@ import { AuthData } from "./auth-data.model";
 import { Router } from "@angular/router";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { TrainingService } from "../training/training.service";
+import { UIService } from "../shared/ui.service";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   authChange = new Subject<boolean>();
 
@@ -14,7 +17,8 @@ export class AuthService {
 
   constructor(private router: Router,
               private auth: AngularFireAuth,
-              private trainingService: TrainingService) {
+              private trainingService: TrainingService,
+              private uiService: UIService) {
   }
 
   initAuthListener() {
@@ -33,21 +37,27 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData) {
+    this.uiService.loadingStateChanged.next(true);
     this.auth.createUserWithEmailAndPassword(
       authData.email,
       authData.password
-    ).catch(error =>
-      console.error(error)
-    );
+    ).catch(error => {
+      this.uiService.showSnackbar(error.message, 3000);
+    }).finally(() => {
+      this.uiService.loadingStateChanged.next(false);
+    });
   }
 
   login(authData: AuthData) {
+    this.uiService.loadingStateChanged.next(true);
     this.auth.signInWithEmailAndPassword(
       authData.email,
       authData.password
-    ).catch(error =>
-      console.error(error)
-    );
+    ).catch(error => {
+      this.uiService.showSnackbar(error.message, 3000);
+    }).finally(() => {
+      this.uiService.loadingStateChanged.next(false);
+    });
   }
 
   logout() {
