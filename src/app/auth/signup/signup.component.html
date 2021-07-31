@@ -11,13 +11,16 @@
       <mat-hint align="end">{{pwInput.value?.length}} / 6</mat-hint>
     </mat-form-field>
     <mat-form-field>
-      <input [matDatepicker]="$any(picker)" [max]="maxDate" matInput name="birthdate" ngModel placeholder="Your birth date"
+      <input [matDatepicker]="$any(picker)" [max]="maxDate" matInput name="birthdate" ngModel
+             placeholder="Your birth date"
              required>
       <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <mat-checkbox name="agree" ngModel required color="primary">Agree to Terms and Conditions</mat-checkbox>
-    <button *ngIf="!isLoading" color="primary" mat-raised-button type="submit" [disabled]="f.invalid">Submit</button>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <button *ngIf="!(isLoading$ | async)" [disabled]="f.invalid" color="primary" mat-raised-button type="submit">
+      Submit
+    </button>
+    <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
   </form>
 </section>

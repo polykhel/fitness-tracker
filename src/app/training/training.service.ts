@@ -1,9 +1,12 @@
-import { Exercise } from "./exercise.model";
 import { Injectable } from "@angular/core";
-import { Subject, Subscription } from "rxjs";
-import { finalize, map } from "rxjs/operators";
 import { AngularFirestore } from "@angular/fire/firestore";
+import { Store } from "@ngrx/store";
+import { Subject, Subscription } from "rxjs";
+import { map } from "rxjs/operators";
+import * as fromRoot from '../app.reducer';
+import * as UI from '../shared/ui.actions';
 import { UIService } from "../shared/ui.service";
+import { Exercise } from "./exercise.model";
 
 @Injectable()
 export class TrainingService {
@@ -16,11 +19,12 @@ export class TrainingService {
   private fbSubs: Subscription[] = [];
 
   constructor(private db: AngularFirestore,
-              private uiService: UIService) {
+              private uiService: UIService,
+              private store: Store<fromRoot.State>) {
   }
 
   fetchAvailableExercises() {
-    this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch(new UI.StartLoading());
     this.fbSubs.push(this.db
       .collection<Exercise>('availableExercises')
       .snapshotChanges()
@@ -35,14 +39,12 @@ export class TrainingService {
               calories: data.calories
             };
           })
-        }),
-        finalize(() => {
-          this.uiService.loadingStateChanged.next(false);
         })
       )
       .subscribe((exercises: Exercise[]) => {
         this.availableExercises = exercises;
         this.exercisesChanged.next([...this.availableExercises]);
+        this.store.dispatch(new UI.StopLoading())
       }, () => {
         this.uiService.showSnackbar('Fetching Exercises failed, please try again later', 3000);
       }));

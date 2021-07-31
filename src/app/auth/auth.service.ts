@@ -4,7 +4,8 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 
 import { Subject } from 'rxjs';
-import { State as appState } from '../app.reducer';
+import * as fromRoot from '../app.reducer';
+import * as UI from '../shared/ui.actions';
 import { UIService } from "../shared/ui.service";
 import { TrainingService } from "../training/training.service";
 import { AuthData } from "./auth-data.model";
@@ -21,7 +22,7 @@ export class AuthService {
               private auth: AngularFireAuth,
               private trainingService: TrainingService,
               private uiService: UIService,
-              private store: Store<{ ui: appState }>) {
+              private store: Store<fromRoot.State>) {
   }
 
   initAuthListener() {
@@ -40,26 +41,26 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData) {
-    this.store.dispatch({type: 'START_LOADING'});
+    this.store.dispatch(new UI.StartLoading());
     this.auth.createUserWithEmailAndPassword(
       authData.email,
       authData.password
     ).catch(error => {
       this.uiService.showSnackbar(error.message, 3000);
     }).finally(() => {
-      this.store.dispatch({type: 'STOP_LOADING'});
+      this.store.dispatch(new UI.StopLoading());
     });
   }
 
   login(authData: AuthData) {
-    this.store.dispatch({type: 'START_LOADING'});
+    this.store.dispatch(new UI.StartLoading());
     this.auth.signInWithEmailAndPassword(
       authData.email,
       authData.password
     ).catch(error => {
       this.uiService.showSnackbar(error.message, 3000);
     }).finally(() => {
-      this.store.dispatch({type: 'STOP_LOADING'});
+      this.store.dispatch(new UI.StopLoading());
     });
   }
 
@@ -67,8 +68,8 @@ export class AuthService {
     this.auth.signOut();
   }
 
-
   isAuth() {
     return this.isAuthenticated;
   }
+
 }
