@@ -10,7 +10,9 @@
              formControlName="password"
              type="password">
     </mat-form-field>
-    <button *ngIf="!isLoading" color="primary" mat-raised-button type="submit" [disabled]="loginForm.invalid">Submit</button>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <button *ngIf="!(isLoading$ | async)" [disabled]="loginForm.invalid" color="primary" mat-raised-button
+            type="submit">Submit
+    </button>
+    <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
   </form>
 </section>
